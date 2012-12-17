@@ -1,3 +1,4 @@
+var restify = require('restify');
 var assert = require('assert');
 var sinon = require('sinon');
 var support = require('../../support');
@@ -19,17 +20,39 @@ describe("users/controller.js", function () {
     });
 
     describe("POST /users", function () {
+        var params;
+
+        beforeEach(function () {
+            params = {username: support.random.string(), password: support.random.string()};
+        });
+
         it("passes params to User model", function (done) {
             sinon.stub(User, 'create', function (args, cb) {
                 cb(null, {});
             });
 
-            var params = {username: support.random.string(), password: support.random.string()};
-
             http_client.post('/users', params, function (err, result) {
                 assert.ifError(err);
                 assert.ok(User.create.calledWith(params));
+                User.create.restore();
                 done();
+            });
+        });
+
+        context("when model returns an error", function () {
+            it("responds with the error", function (done) {
+                var fake_err = new restify.InvalidArgumentError('foo');
+                sinon.stub(User, 'create', function (args, cb) {
+                    cb(fake_err, {});
+                });
+
+                http_client.post('/users', params, function (err, result) {
+                    assert.ok(User.create.calledWith(params));
+                    assert.equal(result.code, 'InvalidArgument');
+                    assert.equal(result.message, 'foo');
+                    User.create.restore();
+                    done();
+                });
             });
         });
     });
