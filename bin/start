@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+/**
+ * Starts one or more apps on a single port.
+ */
+var clc = require('cli-color');
+var path = require('path');
+var fs = require('fs');
+var util = require('util');
+
+var log_red = function(msg) {
+    console.log(clc.red.bold(msg));
+};
+
+var help = 'Usage: $0 [app_name1, [app_name2]] -e dev';
+var optimist = require('optimist');
+argv = optimist
+    .boolean(['port'])
+    .alias('port', 'p')
+    .describe('port', 'port to run server(s) on')
+    .string('env')
+    .describe('env', 'NodeJS env')
+    .alias('env', 'e')
+    .usage(help)
+    .argv;
+
+process.env.NODE_ENV = process.env.NODE_ENV || argv.e || 'dev';
+var ENV = process.env.NODE_ENV;
+
+var port = argv.port;
+
+require('../lib');
+
+var app = require('../lib/app')();
+
+if (port) {
+    if (isNaN(parseInt(port, 10))) {
+        throw "Invalid port number";
+    }
+} else {
+    port = 8080;
+}
+
+if (argv._.length === 0) {
+    optimist.showHelp(log_red);
+    process.exit();
+}
+
+function start(module_name, app_port) {
+    app.register(module_name, {port: app_port});
+    console.log(clc.green.bold('Registered: ' + module_name));
+}
+
+function start_apps(app_names) {
+    app_names.forEach(function(app_name) {
+        if (app_name) {
+            console.log("app_name: " + app_name);
+            start(app_name, port);
+        }
+    });
+}
+
+function get_all_app_names() {
+    var app_dir = path.resolve(path.join(__dirname, "../lib/apps"));
+    var app_dirnames = fs.readdirSync(app_dir);
+    var route_path;
+    var app_names = [];
+
+    app_dirnames.forEach(function(app_dirname) {
+        route_path = path.join(app_dir, app_dirname, 'routes.js');
+        if (fs.existsSync(route_path)) {
+            app_names.push(app_dirname);
+        } else {
+            console.error("Error: routes not found at : " + route_path);
+        }
+    });
+
+    return app_names;
+}
+
+var app_names = argv._;
+
+if (app_names[0] === 'all') {
+    app_names = get_all_app_names();
+}
+
+start_apps(app_names);

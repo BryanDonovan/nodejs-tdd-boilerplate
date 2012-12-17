@@ -1,12 +1,12 @@
 var Faker = require('Faker');
 
 var random = {
-    number: function(max) {
+    number: function (max) {
         max = max || 10000;
         return Faker.Helpers.randomNumber(max);
     },
 
-    string: function(str_len) {
+    string: function (str_len) {
         str_len = str_len || 8;
         var chars = "abcdefghiklmnopqrstuvwxyz";
         var random_str = '';
@@ -17,7 +17,7 @@ var random = {
         return random_str;
     },
 
-    email: function() {
+    email: function () {
         return this.string() + '+' + this.string() + '@' + 'example.com';
     }
 };

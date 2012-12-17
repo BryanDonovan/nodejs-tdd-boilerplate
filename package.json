@@ -9,9 +9,11 @@
     "main": "./index",
     "dependencies": {
         "async": "0.1.22",
+        "bunyan": "0.10.0",
         "cli-color": "0.1.6",
         "optimist" : "0.3.5",
-        "restify": "1.4.4"
+        "restify": "1.4.4",
+        "settings": "0.1.0"
     },
     "devDependencies": {
         "Faker" : "git://github.com/BryanDonovan/Faker.js.git#master",
