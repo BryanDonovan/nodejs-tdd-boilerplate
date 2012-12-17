@@ -14,7 +14,7 @@ var log_red = function(msg) {
 var help = 'Usage: $0 [app_name1, [app_name2]] -e dev';
 var optimist = require('optimist');
 argv = optimist
-    .boolean(['port'])
+    .string(['port'])
     .alias('port', 'p')
     .describe('port', 'port to run server(s) on')
     .string('env')
@@ -34,7 +34,7 @@ var app = require('../lib/app')();
 
 if (port) {
     if (isNaN(parseInt(port, 10))) {
-        throw "Invalid port number";
+        throw new Error("Invalid port number: " + port);
     }
 } else {
     port = 8080;

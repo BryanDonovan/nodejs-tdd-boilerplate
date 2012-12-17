@@ -1,15 +1,13 @@
 #!/usr/bin/env node
 /**
  * Spawns one or more apps on multiple ports listed in apps' settings files.
- * TODO: Allow overriding settings.
- * TODO: This file probably needs review and refactoring.
- * TODO: Accept a 'copies' arg to specify how many instance of each app to launch.
- *       (see sonos-js/app.js for example).
  */
 var clc = require('cli-color');
 var path = require('path');
 var fs = require('fs');
 var spawn = require('child_process').spawn;
+var Settings = require('settings');
+var config = new Settings(require('../config'));
 
 var help = 'Usage: launch [app_name1 [app_name2]](required))';
 var argv = require('optimist')
@@ -27,13 +25,11 @@ if (argv._.length === 0) {
 process.env.NODE_ENV = process.env.NODE_ENV || argv.e || 'dev';
 var ENV = process.env.NODE_ENV;
 
-require('../src/index.js');
+require('../lib');
 
-// TODO: what path and file name for this combined log?
-// Or should it not be combined?
 function start_detached(module_name, app_port) {
-    var out = fs.openSync(__dirname + '/../logs/multi.log', 'a');
-    var err = fs.openSync(__dirname + '/../logs/multi.log', 'a');
+    var out = fs.openSync(__dirname + '/../log/multi.log', 'a');
+    var err = fs.openSync(__dirname + '/../log/multi.log', 'a');
     var start_opts = [module_name, '--port', app_port, '-e', ENV];
     var spawn_opts = {
         detached: true,
@@ -49,9 +45,9 @@ function start_detached(module_name, app_port) {
 function get_app_ports(app_settings) {
     var ports = [];
 
-    if (app_settings && app_settings[ENV] && app_settings[ENV].server && app_settings[ENV].server.port) {
-        var starting_port = app_settings[ENV].server.port;
-        var nbr_of_proxies = app_settings[ENV].server.proxies;
+    if (app_settings && app_settings.port) {
+        var starting_port = app_settings.port;
+        var nbr_of_proxies = app_settings.proxies;
         for (var i = 0; i < nbr_of_proxies; i++) {
             ports.push(starting_port + i);
         }
@@ -60,15 +56,15 @@ function get_app_ports(app_settings) {
     return ports;
 }
 
-argv._.forEach(function(module) {
-    var app_settings = require('../settings/' + module).settings;
+argv._.forEach(function(app_name) {
+    var app_settings = config.apps[app_name];
     var ports = get_app_ports(app_settings);
 
     if (ports.length === 0) {
-        throw new Error("Failed to get port from settings for module: " + module);
+        throw new Error("Failed to get port from settings for app: " + app_name);
     }
 
     ports.forEach(function(app_port) {
-        start_detached(module, app_port);
+        start_detached(app_name, app_port);
     });
 });

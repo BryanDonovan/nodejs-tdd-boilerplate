@@ -11,11 +11,12 @@ describe("Feature: User creation", function () {
     context("Scenario: using a username and password", function () {
         context("Given a username does not already exist", function () {
             context("When an API client POSTs to /users with a valid username and password", function () {
+                var params;
                 var response;
                 var raw_res;
 
                 before(function (done) {
-                    var params = {
+                    params = {
                         username: support.random.string(),
                         password: support.random.string()
                     };
@@ -32,8 +33,9 @@ describe("Feature: User creation", function () {
                     assert.strictEqual(raw_res.statusCode, 200);
                 });
 
-                it("And the response data should include the user's ID", function () {
+                it("And the response data should include the user's ID and username", function () {
                     assert.ok(response.data.id);
+                    assert.equal(response.data.username, params.username);
                 });
             });
         });
