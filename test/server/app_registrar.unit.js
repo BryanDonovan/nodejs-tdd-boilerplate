@@ -5,9 +5,6 @@ var support = require('../support');
 var path = require('path');
 var AppRegistrar = main.server.AppRegistrar;
 
-var settings_path = path.join(__dirname, '..', 'support', 'data', 'fake_app_settings.js');
-var empty_settings_path = path.join(__dirname, '..', 'support', 'data', 'empty_app_settings.js');
-
 describe("app_registrar.js", function () {
     var server;
 
