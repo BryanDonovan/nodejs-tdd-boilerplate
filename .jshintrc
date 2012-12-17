@@ -18,6 +18,7 @@
         "module",
         "process",
         "require",
+        "setTimeout",
 
         "after",
         "afterEach",
