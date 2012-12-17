@@ -12,6 +12,26 @@ if (!port) {
     }
 }
 
+function TestServer(args) {
+    this.routes = args.routes;
+    this.server = restify.createServer();
+    this.server.use(restify.bodyParser());
+    this.server.use(restify.queryParser());
+    main.server.router.register_routes(this.server, this.routes);
+}
+
+TestServer.prototype.start = function () {
+    if (this.server) {
+        this.server.listen(port, host);
+    } else {
+        throw new Error('Server not found');
+    }
+};
+
+TestServer.prototype.stop = function () {
+    this.server.close();
+};
+
 function HttpClient(args) {
     args = args || {};
     if (!args.host) {
@@ -54,7 +74,16 @@ HttpClient.prototype.del = function (path_or_options, cb) {
 var http = {
     client: function () {
         return new HttpClient({host: host, port: port});
-    }
+    },
+
+    server: {
+        create: function (routes) {
+            return new TestServer({routes: routes});
+        }
+    },
+
+    host: host,
+    port: port
 };
 
 module.exports = http;
