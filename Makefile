@@ -3,6 +3,7 @@ BASE = .
 ISTANBUL = ./node_modules/.bin/istanbul
 TEST_COMMAND = NODE_ENV=test ./node_modules/.bin/mocha
 COVERAGE_OPTS = --lines 95 --statements 90 --branches 80 --functions 90
+BUSTER = ./node_modules/.bin/buster test
 
 main: lint test
 
@@ -17,6 +18,9 @@ test: cover check-coverage
 
 test-cov: cover check-coverage
 	open coverage/lcov-report/index.html
+
+test-buster:
+	$(BUSTER)
 
 test-acceptance:
 	test/run.js -T acceptance

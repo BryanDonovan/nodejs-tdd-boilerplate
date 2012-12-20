@@ -1,4 +1,5 @@
 var ISTANBUL = './node_modules/.bin/istanbul';
+var BUSTER = './node_modules/.bin/buster test';
 var COVERAGE_OPTS = '--lines 95 --statements 90 --branches 80 --functions 90';
 
 var print_opts = {printStdout: true, printStderr: true};
@@ -17,13 +18,13 @@ namespace('test', function() {
     });
 
     desc('Run tests with test coverage');
-    task('cover', {async: true}, function(args) {
+    task('cover', {async: true}, function() {
         var command = ISTANBUL + " cover test/run.js";
         jake.exec(command, complete, print_opts);
     });
 
     desc('Check test coverage');
-    task('check-coverage', {async: true}, function(args) {
+    task('check-coverage', {async: true}, function() {
         var command = ISTANBUL + " check-coverage " + COVERAGE_OPTS;
         jake.exec(command, complete, print_opts);
     });
@@ -31,6 +32,12 @@ namespace('test', function() {
     desc('Run acceptance tests');
     task('acceptance', {async: true}, function() {
         var command = "test/run.js -T acceptance --timeout 30000";
+        jake.exec(command, complete, print_opts);
+    });
+
+    desc('Run sample Buster.js test');
+    task('buster', {async: true}, function() {
+        var command = BUSTER;
         jake.exec(command, complete, print_opts);
     });
 });
