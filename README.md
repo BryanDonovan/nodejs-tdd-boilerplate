@@ -29,6 +29,12 @@ Assuming you already have NodeJS 0.8.11 or higher installed:
     npm install .
     make
 
+Note: to use `jake` you need to install it globally:
+
+    npm install -g jake
+
+You can view available jake tasks with `jake -T`.
+
 The `jake` or `make` command will run JSHint, all the mocha unit tests, and check the test coverage.  To view the test coverage report, open coverage/lcov-report/index.html after running `make`.
 
 You can also run `make test` to just run the tests with coverage, `make test-cov` to run the tests and attempt to open the coverage report in your browser, and `make lint` to run JSHint.

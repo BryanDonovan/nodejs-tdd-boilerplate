@@ -10,6 +10,12 @@ desc('Run tests and check test coverage');
 task('test', ['test:cover', 'test:check-coverage'], {async: true}, complete);
 
 namespace('test', function() {
+    desc('Run tests without coverage');
+    task('no-cov', {async: true}, function(args) {
+        var command = "test/run.js";
+        jake.exec(command, complete, print_opts);
+    });
+
     desc('Run tests with test coverage');
     task('cover', {async: true}, function(args) {
         var command = ISTANBUL + " cover test/run.js";
