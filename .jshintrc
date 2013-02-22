@@ -22,8 +22,10 @@
 
         "after",
         "afterEach",
+        "afterAll",
         "before",
         "beforeEach",
+        "beforeAll",
         "context",
         "describe",
         "it"
