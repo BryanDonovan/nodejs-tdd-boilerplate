@@ -38,6 +38,10 @@ if (argv.help || types_to_use.length === 0) {
 }
 
 var is_valid_file = function (file) {
+    if (file.match(/buster/)) {
+        return false;
+    }
+
     for (var i = 0; i < types_to_use.length; i++) {
         var test_type = types_to_use[i];
         var ext = test_type + ".js";

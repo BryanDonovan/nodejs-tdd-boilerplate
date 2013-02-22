@@ -19,6 +19,8 @@ test: cover check-coverage
 test-cov: cover check-coverage
 	open coverage/lcov-report/index.html
 
+# You likely need to install buster globally for this to work, because buster
+# doesn't work with relative paths.
 test-buster:
 	$(BUSTER)
 

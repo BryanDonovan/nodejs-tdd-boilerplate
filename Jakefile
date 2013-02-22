@@ -35,6 +35,8 @@ namespace('test', function() {
         jake.exec(command, complete, print_opts);
     });
 
+    // You likely need to install buster globally for this to work, because buster
+    // doesn't work with relative paths.
     desc('Run sample Buster.js test');
     task('buster', {async: true}, function() {
         var command = BUSTER;
