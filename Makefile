@@ -31,4 +31,4 @@ lint:
 	./node_modules/jshint/bin/hint ./lib --config $(BASE)/.jshintrc && cd test && ../node_modules/jshint/bin/hint . && cd ..
 
 
-.PHONY: test docs
+.PHONY: test test-buster

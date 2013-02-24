@@ -3,7 +3,7 @@ buster.spec.expose(); // Make spec functions global
 var assert = buster.assert;
 
 var restify = require('restify');
-var support = require('../../../support');
+var support = require('../../support');
 var http = support.http;
 var User = main.models.User;
 
