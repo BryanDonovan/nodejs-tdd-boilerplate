@@ -17,12 +17,11 @@
     },
     "devDependencies": {
         "buster": "0.6.3",
-        "Faker" : "git://github.com/BryanDonovan/Faker.js.git#master",
-        "jshint": "0.9.0",
-        "jugglingdb": "0.2.0-2",
-        "istanbul": "0.1.25",
-        "mocha": "1.7.4",
-        "sinon": "1.4.2"
+        "Faker" : "0.5.6",
+        "jshint": "1.0.0",
+        "istanbul": "0.1.29",
+        "mocha": "1.8.1",
+        "sinon": "1.5.2"
     },
     "repository": {
         "type": "git",

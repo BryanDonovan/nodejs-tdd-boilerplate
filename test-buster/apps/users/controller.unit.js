@@ -7,7 +7,7 @@ var support = require('../../support');
 var http = support.http;
 var User = main.models.User;
 
-var spec = describe("users/controller.js", function () {
+describe("users/controller.js", function () {
     var app;
     var http_client;
 
@@ -33,7 +33,7 @@ var spec = describe("users/controller.js", function () {
                 cb(null, {});
             });
 
-            http_client.post('/users', params, function (err, result) {
+            http_client.post('/users', params, function (err) {
                 buster.refute(err);
                 assert(User.create.calledWith(params));
                 assert(true);

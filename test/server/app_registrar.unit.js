@@ -1,8 +1,6 @@
 var assert = require('assert');
 var restify = require('restify');
-var sinon = require('sinon');
 var support = require('../support');
-var path = require('path');
 var AppRegistrar = main.server.AppRegistrar;
 
 describe("app_registrar.js", function () {
@@ -27,7 +25,7 @@ describe("app_registrar.js", function () {
         context("when server missing", function () {
             it("throws an error", function () {
                 assert.throws(function () {
-                    var registrar = new AppRegistrar(null, 'users');
+                    new AppRegistrar(null, 'users');
                 }, /AppRegistrar.*server/);
             });
         });
@@ -35,7 +33,7 @@ describe("app_registrar.js", function () {
         context("when app_name not found in apps path", function () {
             it("throws an error", function () {
                 assert.throws(function () {
-                    var registrar = new AppRegistrar(server, 'foo');
+                    new AppRegistrar(server, 'foo');
                 }, /AppRegistrar.*app not found/);
             });
         });

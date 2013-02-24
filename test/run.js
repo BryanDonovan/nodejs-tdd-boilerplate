@@ -2,7 +2,6 @@
 process.env.NODE_ENV = 'test';
 require('../lib');
 
-var fs = require('fs');
 var Mocha = require('mocha');
 var optimist = require('optimist');
 var walk_dir = require('./support/walk_dir');
@@ -67,6 +66,7 @@ function run(cb) {
 }
 
 run(function (err) {
+    if (err) { throw err; }
     mocha.run(function (failures) {
         process.exit(failures);
     });

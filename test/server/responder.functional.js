@@ -1,6 +1,5 @@
 var assert = require('assert');
 var restify = require('restify');
-var sinon = require('sinon');
 var support = require('../support');
 var http = support.http;
 var responder = main.server.responder;
@@ -38,7 +37,7 @@ describe("functional - server/responder.js", function () {
     describe("error responses", function () {
         describe("restify errors", function () {
             it("returns correct response body", function (done) {
-                http_client.get('/test/errors/restify', function (err, result, raw_res) {
+                http_client.get('/test/errors/restify', function (err, result) {
                     var expected = {
                         code: 'InvalidArgument',
                         message: 'foo arg invalid'

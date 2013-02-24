@@ -1,6 +1,6 @@
+/*jshint unused:false*/
 var assert = require('assert');
 var restify = require('restify');
-var sinon = require('sinon');
 var support = require('../support');
 var router = main.server.router;
 var TEST_HOST = support.http.host;

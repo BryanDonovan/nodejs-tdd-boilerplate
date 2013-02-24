@@ -31,7 +31,7 @@ describe("users/controller.js", function () {
                 cb(null, {});
             });
 
-            http_client.post('/users', params, function (err, result) {
+            http_client.post('/users', params, function (err) {
                 assert.ifError(err);
                 assert.ok(User.create.calledWith(params));
                 User.create.restore();

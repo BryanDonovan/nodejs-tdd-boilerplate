@@ -5,7 +5,7 @@ TEST_COMMAND = NODE_ENV=test ./node_modules/.bin/mocha
 COVERAGE_OPTS = --lines 95 --statements 90 --branches 80 --functions 90
 BUSTER = ./node_modules/.bin/buster test
 
-main: lint test
+main: lint test test-buster
 
 cover:
 	$(ISTANBUL) cover test/run.js
@@ -28,7 +28,9 @@ test-acceptance:
 	test/run.js -T acceptance
 
 lint:
-	./node_modules/jshint/bin/hint ./lib --config $(BASE)/.jshintrc && cd test && ../node_modules/jshint/bin/hint . && cd ..
+	./node_modules/.bin/jshint ./lib --config $(BASE)/.jshintrc && \
+	./node_modules/.bin/jshint ./test --config $(BASE)/.jshintrc
+	./node_modules/.bin/jshint ./test-buster --config $(BASE)/.jshintrc
 
 
 .PHONY: test test-buster

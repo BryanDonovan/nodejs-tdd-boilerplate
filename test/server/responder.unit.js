@@ -1,11 +1,6 @@
 var assert = require('assert');
-var restify = require('restify');
 var sinon = require('sinon');
-var support = require('../support');
 var responder = main.server.responder;
-
-var fake_req = {
-};
 
 var fake_res = {
     header: function () {},
@@ -41,7 +36,7 @@ describe("responder.js", function () {
 
         context("when no data passed in", function () {
             it("calls responder.error()", function (done) {
-                sinon.stub(responder, 'error', function (res, err, next, options) {
+                sinon.stub(responder, 'error', function (res, err, next) {
                     next();
                 });
 
@@ -49,7 +44,7 @@ describe("responder.js", function () {
 
                 assert.ok(responder.error.called);
                 responder.error.restore();
-                
+
                 done();
             });
         });

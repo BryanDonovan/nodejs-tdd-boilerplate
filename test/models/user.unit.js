@@ -1,5 +1,4 @@
 var assert = require('assert');
-var support = require('../support');
 var User = main.models.User;
 
 describe("User model", function () {

@@ -1,8 +1,6 @@
 var restify = require('restify');
-var util = require('util');
 var host = process.env.HOST || 'localhost';
 var port = process.env.PORT;
-var ENV = process.env.NODE_ENV;
 
 if (!port) {
     if (host === 'localhost') {

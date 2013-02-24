@@ -1,7 +1,4 @@
 var assert = require('assert');
-var sinon = require('sinon');
-var support = require('../support');
-var path = require('path');
 var Settings = require('settings');
 var config = new Settings(require('../../config'));
 var AppServer = main.server.AppServer;
@@ -11,7 +8,7 @@ describe('app_server.js', function () {
         context("when config is not passed in", function () {
             it("throws an error", function () {
                 assert.throws(function () {
-                    var new_server = new AppServer(null);
+                    new AppServer(null);
                 }, /AppServer.*config/);
             });
         });
