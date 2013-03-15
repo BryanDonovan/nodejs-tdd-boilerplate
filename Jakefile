@@ -1,5 +1,4 @@
 var ISTANBUL = './node_modules/.bin/istanbul';
-var BUSTER = './node_modules/.bin/buster test';
 var COVERAGE_OPTS = '--lines 95 --statements 90 --branches 80 --functions 90';
 
 var print_opts = {printStdout: true, printStderr: true};
@@ -32,14 +31,6 @@ namespace('test', function() {
     desc('Run acceptance tests');
     task('acceptance', {async: true}, function() {
         var command = "test/run.js -T acceptance --timeout 30000";
-        jake.exec(command, complete, print_opts);
-    });
-
-    // You likely need to install buster globally for this to work, because buster
-    // doesn't work with relative paths.
-    desc('Run sample Buster.js test');
-    task('buster', {async: true}, function() {
-        var command = BUSTER;
         jake.exec(command, complete, print_opts);
     });
 });

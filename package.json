@@ -16,7 +16,6 @@
         "settings": "0.1.0"
     },
     "devDependencies": {
-        "buster": "0.6.3",
         "Faker" : "0.5.6",
         "jshint": "1.0.0",
         "istanbul": "0.1.29",
