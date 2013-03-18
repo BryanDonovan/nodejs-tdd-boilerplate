@@ -8,6 +8,8 @@ var fake_res = {
     json: function () {}
 };
 
+var fake_req = {};
+
 var fake_next = function () {};
 
 
@@ -43,8 +45,8 @@ describe("responder.js", function () {
                 responder.success(fake_res, null, fake_next);
 
                 assert.ok(responder.error.called);
-                responder.error.restore();
 
+                responder.error.restore();
                 done();
             });
         });
@@ -58,6 +60,45 @@ describe("responder.js", function () {
 
                 mock.verify();
                 mock.restore();
+                done();
+            });
+        });
+    });
+
+    describe("redirect()", function () {
+        var args;
+
+        beforeEach(function () {
+            args = {url: '/foo/bar'};
+        });
+
+        context("when no args passed in", function () {
+            it("responds with an InternalError", function (done) {
+                sinon.stub(responder, 'error', function (res, err, next) {
+                    next();
+                });
+
+                responder.redirect(fake_res, fake_req, null, fake_next);
+
+                assert.ok(responder.error.called);
+
+                responder.error.restore();
+                done();
+            });
+        });
+
+        context("when args.user not passed in", function () {
+            it("responds with an InternalError", function (done) {
+                sinon.stub(responder, 'error', function (res, err, next) {
+                    next();
+                });
+
+                delete args.url;
+                responder.redirect(fake_res, fake_req, args, fake_next);
+
+                assert.ok(responder.error.called);
+
+                responder.error.restore();
                 done();
             });
         });

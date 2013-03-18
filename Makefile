@@ -4,7 +4,7 @@ ISTANBUL = ./node_modules/.bin/istanbul
 TEST_COMMAND = NODE_ENV=test ./node_modules/.bin/mocha
 COVERAGE_OPTS = --lines 95 --statements 90 --branches 80 --functions 90
 
-main: lint test test-buster
+main: lint test
 
 cover:
 	$(ISTANBUL) cover test/run.js
@@ -26,4 +26,4 @@ lint:
 	./node_modules/.bin/jshint ./test --config $(BASE)/.jshintrc
 
 
-.PHONY: test test-buster
+.PHONY: test

@@ -41,12 +41,21 @@ function HttpClient(args) {
     this.port = args.port;
     this.url = 'http://' + this.host + ':' + this.port;
 
-    //this.client = restify.createStringClient({url: this.url});
-    this.client = restify.createJsonClient({url: this.url});
+    if (args.type === 'string') {
+        this.client = restify.createStringClient({url: this.url});
+    } else {
+        this.client = restify.createJsonClient({url: this.url});
+    }
 }
 
 HttpClient.prototype.get = function (path_or_options, cb) {
     this.client.get(path_or_options, function (err, req, res, data) {
+        cb(err, data, res, req);
+    });
+};
+
+HttpClient.prototype.get_plain = function (path_or_options, cb) {
+    this.string_client.get(path_or_options, function (err, req, res, data) {
         cb(err, data, res, req);
     });
 };
@@ -70,6 +79,10 @@ HttpClient.prototype.del = function (path_or_options, cb) {
 };
 
 var http = {
+    string_client: function () {
+        return new HttpClient({host: host, port: port, type: 'string'});
+    },
+
     client: function () {
         return new HttpClient({host: host, port: port});
     },
