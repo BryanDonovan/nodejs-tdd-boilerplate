@@ -35,7 +35,7 @@ namespace('test', function() {
     });
 });
 
-var JSHINT = './node_modules/jshint/bin/hint --config .jshintrc';
+var JSHINT = './node_modules/.bin/jshint --config .jshintrc';
 
 desc('Run jshint against src and test directories');
 task('lint', {async: true}, function() {
