@@ -21,6 +21,11 @@ var methods = {
     },
 
     redirect_to_full_path: function (req, res, next) {
+        var args = {url: '/foo/bar'};
+        return responder.redirect(req, res, args, next);
+    },
+
+    redirect_to_full_path_without_leading_slash: function (req, res, next) {
         var args = {url: 'foo/bar'};
         return responder.redirect(req, res, args, next);
     },
@@ -54,6 +59,12 @@ var routes = [
         method: "get",
         url: "/test/redirects/full_path",
         func: methods.redirect_to_full_path,
+        middleware: []
+    },
+    {
+        method: "get",
+        url: "/test/redirects/full_path_without_leading_slash",
+        func: methods.redirect_to_full_path_without_leading_slash,
         middleware: []
     },
     {
@@ -123,9 +134,19 @@ describe("functional - server/responder.js", function () {
         context("when full path passed in without host and port", function () {
             it("redirects to the correct URL using request's host and port", function (done) {
                 http_client.get('/test/redirects/full_path', function (err, result, raw_res) {
-                    var expected_location = http.host + ':' + http.port + '/foo/bar';
+                    var expected_location = 'http://' + http.host + ':' + http.port + '/foo/bar';
                     assert.equal(raw_res.headers.location, expected_location);
                     assert.equal(raw_res.statusCode, 302);
+                    done();
+                });
+            });
+        });
+
+        context("when full path passed in without leading slash", function () {
+            it("returns Internal error", function (done) {
+                http_client.get('/test/redirects/full_path_without_leading_slash', function (err, result, raw_res) {
+                    assert.equal(err.code, 'Internal');
+                    assert.ok(err.message.match(/leading slash/));
                     done();
                 });
             });
@@ -135,7 +156,7 @@ describe("functional - server/responder.js", function () {
             it("redirects to the correct URL using request's host and port", function (done) {
                 var starting_path = '/test/redirects/relative_path';
                 http_client.get(starting_path, function (err, result, raw_res) {
-                    var expected_location = http.host + ':' + http.port + starting_path + '/foo/bar';
+                    var expected_location = 'http://' + http.host + ':' + http.port + starting_path + '/foo/bar';
                     assert.equal(raw_res.headers.location, expected_location);
                     assert.equal(raw_res.statusCode, 302);
                     done();

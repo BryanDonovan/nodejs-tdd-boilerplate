@@ -1,14 +1,20 @@
 var assert = require('assert');
 var sinon = require('sinon');
+var support = require('../support');
 var responder = main.server.responder;
 
 var fake_res = {
     header: function () {},
     status: function () {},
-    json: function () {}
+    json: function () {},
+    send: function () {}
 };
 
-var fake_req = {};
+var fake_req = {
+    headers: {
+        host: 'local.foo.com'
+    }
+};
 
 var fake_next = function () {};
 
@@ -78,7 +84,7 @@ describe("responder.js", function () {
                     next();
                 });
 
-                responder.redirect(fake_res, fake_req, null, fake_next);
+                responder.redirect(fake_req, fake_res, null, fake_next);
 
                 assert.ok(responder.error.called);
 
@@ -94,13 +100,27 @@ describe("responder.js", function () {
                 });
 
                 delete args.url;
-                responder.redirect(fake_res, fake_req, args, fake_next);
+                responder.redirect(fake_req, fake_res, args, fake_next);
 
                 assert.ok(responder.error.called);
 
                 responder.error.restore();
                 done();
             });
+        });
+
+        context("when request's protocol is https", function() {
+            sinon.stub(fake_res, 'header');
+
+            var https_req = support.shallow_clone(fake_req);
+            https_req.headers['x-forwarded-proto'] = 'https';
+            var args = {url: '/foo/bar'};
+
+            responder.redirect(https_req, fake_res, args, fake_next);
+
+            assert.ok(fake_res.header.calledWith('Location', "https://local.foo.com/foo/bar"));
+
+            fake_res.header.restore();
         });
     });
 });
