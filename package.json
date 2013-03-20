@@ -8,7 +8,7 @@
     },
     "main": "./index",
     "dependencies": {
-        "async": "0.1.22",
+        "async": "0.2.5",
         "bunyan": "0.10.0",
         "cli-color": "0.1.6",
         "optimist" : "0.3.5",
