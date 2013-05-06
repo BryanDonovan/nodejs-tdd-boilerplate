@@ -9,7 +9,7 @@
     "main": "./index",
     "dependencies": {
         "async": "0.2.5",
-        "bunyan": "0.10.0",
+        "bunyan": "0.21.1",
         "cli-color": "0.1.6",
         "optimist" : "0.3.5",
         "restify": "2.4.1",
@@ -17,10 +17,10 @@
     },
     "devDependencies": {
         "Faker" : "0.5.6",
-        "jshint": "1.0.0",
+        "jshint": "1.1.0",
         "istanbul": "0.1.29",
-        "mocha": "1.8.1",
-        "sinon": "1.5.2"
+        "mocha": "1.9.0",
+        "sinon": "1.6.0"
     },
     "repository": {
         "type": "git",
