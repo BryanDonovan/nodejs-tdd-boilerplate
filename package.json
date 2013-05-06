@@ -12,7 +12,7 @@
         "bunyan": "0.10.0",
         "cli-color": "0.1.6",
         "optimist" : "0.3.5",
-        "restify": "1.4.4",
+        "restify": "2.4.1",
         "settings": "0.1.0"
     },
     "devDependencies": {
