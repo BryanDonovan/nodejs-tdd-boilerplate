@@ -144,7 +144,7 @@ describe("functional - server/responder.js", function () {
 
         context("when full path passed in without leading slash", function () {
             it("returns Internal error", function (done) {
-                http_client.get('/test/redirects/full_path_without_leading_slash', function (err, result, raw_res) {
+                http_client.get('/test/redirects/full_path_without_leading_slash', function (err) {
                     assert.equal(err.body.code, 'InternalError');
                     assert.ok(err.message.match(/leading slash/));
                     done();
