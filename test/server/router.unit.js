@@ -48,13 +48,14 @@ describe("server/router.js", function () {
 
     describe("register_routes()", function () {
         it("adds routes to server", function () {
-            assert.strictEqual(server.routes.length, 0);
+            assert.strictEqual(Object.keys(server.routes).length, 0);
             assert.strictEqual(routes.length, 2);
 
             router.register_routes(server, routes);
 
-            assert.strictEqual(server.routes.length, 2);
-            assert.equal(server.routes[0].url, routes[0].url);
+            assert.strictEqual(Object.keys(server.routes).length, 2);
+            assert.ok(server.routes['gettestfoo']);
+            assert.ok(server.routes['gettestbar']);
         });
 
         it("throws error if routes are not an array", function () {

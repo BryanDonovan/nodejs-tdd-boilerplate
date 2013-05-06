@@ -109,18 +109,20 @@ describe("responder.js", function () {
             });
         });
 
-        context("when request's protocol is https", function() {
-            sinon.stub(fake_res, 'header');
+        context("when request's protocol is https", function () {
+            it("redirects with https protocol", function () {
+                sinon.stub(fake_res, 'header');
 
-            var https_req = support.shallow_clone(fake_req);
-            https_req.headers['x-forwarded-proto'] = 'https';
-            var args = {url: '/foo/bar'};
+                var https_req = support.shallow_clone(fake_req);
+                https_req.headers['x-forwarded-proto'] = 'https';
+                var args = {url: '/foo/bar'};
 
-            responder.redirect(https_req, fake_res, args, fake_next);
+                responder.redirect(https_req, fake_res, args, fake_next);
 
-            assert.ok(fake_res.header.calledWith('Location', "https://local.foo.com/foo/bar"));
+                assert.ok(fake_res.header.calledWith('Location', "https://local.foo.com/foo/bar"));
 
-            fake_res.header.restore();
+                fake_res.header.restore();
+            });
         });
     });
 });
