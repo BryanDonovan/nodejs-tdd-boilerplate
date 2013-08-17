@@ -18,7 +18,6 @@ A basic boilerplate for NodeJS REST API applications that emphasizes code consis
 
 ## Planned
 * Actual model implementation example instead of stubbed model.
-* Bamboo integration example.
 
 ## Setup
 
