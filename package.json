@@ -16,11 +16,11 @@
         "settings": "0.1.0"
     },
     "devDependencies": {
-        "Faker" : "0.5.6",
-        "jshint": "1.1.0",
-        "istanbul": "0.1.29",
-        "mocha": "1.9.0",
-        "sinon": "1.6.0"
+        "Faker" : "0.5.11",
+        "jshint": "2.1.10",
+        "istanbul": "0.1.43",
+        "mocha": "1.12.0",
+        "sinon": "1.7.3"
     },
     "repository": {
         "type": "git",
