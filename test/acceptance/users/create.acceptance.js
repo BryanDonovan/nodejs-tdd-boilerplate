@@ -22,6 +22,8 @@ describe("Feature: User creation", function () {
                     };
 
                     http_client.post('/users', params, function (err, result, raw) {
+                        console.log("\nHERE\n");
+                        console.log(result);
                         assert.ifError(err);
                         response = result;
                         raw_res = raw;

@@ -1,6 +1,6 @@
 require('../../lib');
 
-module.exports = {
+var support = {
     http: require('./http'),
     random: require('./random'),
     walk_dir: require('./walk_dir'),
@@ -13,5 +13,11 @@ module.exports = {
             });
         }
         return ret;
+    },
+
+    fake_error: function (message) {
+        return new Error(message || support.random.string());
     }
 };
+
+module.exports = support;

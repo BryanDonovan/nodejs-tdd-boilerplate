@@ -1,4 +1,5 @@
 var assert = require('assert');
+require('../support');
 var Settings = require('settings');
 var config = new Settings(require('../../config'));
 var AppServer = main.server.AppServer;
