@@ -1,6 +1,6 @@
 {
     "name": "nodejs-tdd-boilerplate",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "TDD boilerplate for NodeJS API apps",
     "author": "Bryan Donovan",
     "engines": {
@@ -8,12 +8,12 @@
     },
     "main": "./index",
     "dependencies": {
-        "async": "0.2.5",
-        "bunyan": "0.21.1",
-        "cli-color": "0.1.6",
-        "optimist" : "0.3.5",
-        "restify": "2.4.1",
-        "settings": "0.1.0"
+        "async": "0.2.9",
+        "bunyan": "0.21.4",
+        "cli-color": "0.2.2",
+        "optimist" : "0.6.0",
+        "restify": "2.6.0",
+        "settings": "0.1.1"
     },
     "devDependencies": {
         "Faker" : "0.5.11",
