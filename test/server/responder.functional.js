@@ -1,4 +1,6 @@
 var assert = require('assert');
+var fs = require('fs');
+var path = require('path');
 var restify = require('restify');
 var support = require('../support');
 var http = support.http;
@@ -33,6 +35,19 @@ var methods = {
     redirect_to_relative_path: function (req, res, next) {
         var args = {url: './foo/bar'};
         return responder.redirect(req, res, args, next);
+    },
+
+    download_content: function (req, res, next) {
+        var stats = fs.statSync(__filename);
+
+        var args = {
+            filename: 'responder.functional.js',
+            contentType: 'application/javascript',
+            stream: fs.createReadStream(__filename),
+            contentLength: stats.size
+        };
+
+        return responder.download(res, args, next);
     }
 };
 
@@ -72,6 +87,12 @@ var routes = [
         url: "/test/redirects/relative_path",
         func: methods.redirect_to_relative_path,
         middleware: []
+    },
+    {
+        method: "get",
+        url: "/test/downloads/content",
+        func: methods.download_content,
+        middleware: []
     }
 ];
 
@@ -79,12 +100,14 @@ describe("functional - server/responder.js", function () {
     var server;
     var http_client;
     var http_string_client;
+    var http_raw_client;
 
     before(function () {
         server = http.server.create(routes);
         server.start();
         http_client = http.client();
         http_string_client = http.string_client();
+        http_raw_client = http.raw_client();
     });
 
     after(function () {
@@ -160,6 +183,41 @@ describe("functional - server/responder.js", function () {
                     assert.equal(raw_res.headers.location, expected_location);
                     assert.equal(raw_res.statusCode, 302);
                     done();
+                });
+            });
+        });
+    });
+
+    describe("download()", function () {
+        var filename, stream, stats;
+
+        it("returns correct headers and content", function (done) {
+            http_raw_client.get('/test/downloads/content', function (err, data, res, req) {
+                assert.ifError(err); // connection error;
+
+                req.on('result', function (err, res) {
+                    assert.ifError(err); // HTTP status code >= 400;
+
+                    filename = path.join(__dirname, '../../tmp', 'test.js');
+                    stream = fs.createWriteStream(filename);
+
+                    res.on('data', function (chunk) {
+                        stream.write(chunk);
+                    });
+
+                    res.on('end', function () {
+                        stream.end(function () {
+                            assert.equal(res.headers['content-type'], 'application/javascript');
+                            assert.equal(res.headers['content-length'], 7948);
+                            assert.equal(res.headers['content-disposition'], 'attachment; filename=responder.functional.js');
+                            assert.equal(res.statusCode, 200);
+
+                            stats = fs.statSync(filename);
+                            assert.equal(stats.size, 7948);
+
+                            done();
+                        });
+                    });
                 });
             });
         });

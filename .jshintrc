@@ -10,6 +10,7 @@
 
     "predef"        : [  // Extra globals.
         "__dirname",
+        "__filename",
         "Buffer",
         "event",
         "exports",
