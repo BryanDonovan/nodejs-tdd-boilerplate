@@ -93,7 +93,7 @@ describe("responder.js", function () {
             });
         });
 
-        context("when args.user not passed in", function () {
+        context("when args.url not passed in", function () {
             it("responds with an InternalError", function (done) {
                 sinon.stub(responder, 'error', function (res, err, next) {
                     next();
