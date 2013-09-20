@@ -5,6 +5,7 @@ var restify = require('restify');
 var support = require('../support');
 var http = support.http;
 var responder = main.server.responder;
+var file_to_download = path.join(__dirname, '../support/fixtures', 'fake_data.js');
 
 var methods = {
     get_restify_error: function (req, res, next) {
@@ -38,12 +39,12 @@ var methods = {
     },
 
     download_content: function (req, res, next) {
-        var stats = fs.statSync(__filename);
+        var stats = fs.statSync(file_to_download);
 
         var args = {
             filename: 'responder.functional.js',
             contentType: 'application/javascript',
-            stream: fs.createReadStream(__filename),
+            stream: fs.createReadStream(file_to_download),
             contentLength: stats.size
         };
 
@@ -198,7 +199,8 @@ describe("functional - server/responder.js", function () {
                 req.on('result', function (err, res) {
                     assert.ifError(err); // HTTP status code >= 400;
 
-                    filename = path.join(__dirname, '../../tmp', 'test.js');
+                    filename = path.join(__dirname, '../support/tmp', 'downloaded_file.js');
+                    var expected_file_size = fs.statSync(file_to_download).size;
                     stream = fs.createWriteStream(filename);
 
                     res.on('data', function (chunk) {
@@ -208,12 +210,12 @@ describe("functional - server/responder.js", function () {
                     res.on('end', function () {
                         stream.end(function () {
                             assert.equal(res.headers['content-type'], 'application/javascript');
-                            assert.equal(res.headers['content-length'], 7948);
+                            assert.equal(res.headers['content-length'], expected_file_size);
                             assert.equal(res.headers['content-disposition'], 'attachment; filename=responder.functional.js');
                             assert.equal(res.statusCode, 200);
 
                             stats = fs.statSync(filename);
-                            assert.equal(stats.size, 7948);
+                            assert.equal(stats.size, expected_file_size);
 
                             done();
                         });
