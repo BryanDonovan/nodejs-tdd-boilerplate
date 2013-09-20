@@ -1,4 +1,5 @@
 var assert = require('assert');
+var fs = require('fs');
 var sinon = require('sinon');
 var support = require('../support');
 var responder = main.server.responder;
@@ -7,7 +8,8 @@ var fake_res = {
     header: function () {},
     status: function () {},
     json: function () {},
-    send: function () {}
+    send: function () {},
+    setHeader: function () {}
 };
 
 var fake_req = {
@@ -93,7 +95,7 @@ describe("responder.js", function () {
             });
         });
 
-        context("when args.user not passed in", function () {
+        context("when args.url not passed in", function () {
             it("responds with an InternalError", function (done) {
                 sinon.stub(responder, 'error', function (res, err, next) {
                     next();
@@ -122,6 +124,119 @@ describe("responder.js", function () {
                 assert.ok(fake_res.header.calledWith('Location', "https://local.foo.com/foo/bar"));
 
                 fake_res.header.restore();
+            });
+        });
+    });
+
+    describe("download()", function () {
+        var args;
+
+        beforeEach(function () {
+            args = {
+                filename: 'foo.js',
+                contentType: 'application/javascript',
+                stream: fs.createReadStream(__filename),
+                contentLength: 2000
+
+            };
+        });
+
+        context("when no args passed in", function () {
+            it("responds with an InternalError", function (done) {
+                sinon.stub(responder, 'error', function (res, err, next) {
+                    next();
+                });
+
+                responder.download(fake_res, null, fake_next);
+
+                assert.ok(responder.error.called);
+
+                responder.error.restore();
+                done();
+            });
+        });
+
+        context("when args.filename not passed in", function () {
+            it("responds with an InternalError", function (done) {
+                sinon.stub(responder, 'error', function (res, err, next) {
+                    next();
+                });
+
+                delete args.filename;
+                responder.download(fake_res, args, fake_next);
+
+                assert.ok(responder.error.called);
+
+                responder.error.restore();
+                done();
+            });
+        });
+
+        context("when args.stream not passed in", function () {
+            it("responds with an InternalError", function (done) {
+                sinon.stub(responder, 'error', function (res, err, next) {
+                    next();
+                });
+
+                delete args.stream;
+                responder.download(fake_res, args, fake_next);
+
+                assert.ok(responder.error.called);
+
+                responder.error.restore();
+                done();
+            });
+        });
+
+        context("when args.contentType not passed in", function () {
+            it("responds with Content-Type header set to application/octet-stream", function (done) {
+                sinon.spy(fake_res, 'setHeader');
+                sinon.stub(args.stream, 'pipe', function () { });
+
+                delete args.contentType;
+                responder.download(fake_res, args, fake_next);
+
+                assert.ok(fake_res.setHeader.calledWith('Content-Type', 'application/octet-stream'));
+
+                fake_res.setHeader.restore();
+                args.stream.pipe.restore();
+                done();
+            });
+        });
+
+        context("when args.contentLength not passed in", function () {
+            it("responds without Content-Length header set", function (done) {
+                sinon.spy(fake_res, 'setHeader');
+                sinon.stub(args.stream, 'pipe', function () { });
+
+                delete args.contentLength;
+                responder.download(fake_res, args, fake_next);
+
+                assert.ok(!fake_res.setHeader.calledWith('Content-Length'));
+
+                fake_res.setHeader.restore();
+                args.stream.pipe.restore();
+                done();
+            });
+        });
+
+        context("when args passed in correctly", function () {
+            it("responds without 200 status and content", function (done) {
+                sinon.spy(fake_res, 'setHeader');
+                sinon.spy(fake_res, 'status');
+                sinon.stub(args.stream, 'pipe', function () { });
+
+                responder.download(fake_res, args, fake_next);
+
+                assert.ok(fake_res.setHeader.calledWith('Content-Type', 'application/javascript'));
+                assert.ok(fake_res.setHeader.calledWith('Content-Length', 2000));
+                assert.ok(fake_res.setHeader.calledWith('Content-Disposition', 'attachment; filename=foo.js'));
+                assert.ok(fake_res.status.calledWith(200));
+                assert.ok(args.stream.pipe.calledWith(fake_res));
+
+                fake_res.setHeader.restore();
+                args.stream.pipe.restore();
+                done();
             });
         });
     });
