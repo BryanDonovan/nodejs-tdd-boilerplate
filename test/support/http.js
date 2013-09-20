@@ -31,6 +31,8 @@ TestServer.prototype.stop = function () {
 };
 
 function HttpClient(args) {
+    var method;
+
     args = args || {};
     if (!args.host) {
         throw new Error('HTTP Client requires a host param');
@@ -41,11 +43,23 @@ function HttpClient(args) {
     this.port = args.port;
     this.url = 'http://' + this.host + ':' + this.port;
 
-    if (args.type === 'string') {
-        this.client = restify.createStringClient({url: this.url});
-    } else {
-        this.client = restify.createJsonClient({url: this.url});
+    method = 'createJsonClient';
+    args.type = args.type || 'json';
+
+    switch (args.type) {
+    case 'http':
+        method = 'createClient';
+        break;
+
+    case 'string':
+        method = 'createStringClient';
+        break;
+
+    default:
+        break;
     }
+
+    this.client = restify[method]({url: this.url});
 }
 
 HttpClient.prototype.get = function (path_or_options, cb) {
@@ -85,6 +99,10 @@ var http = {
 
     client: function () {
         return new HttpClient({host: host, port: port});
+    },
+
+    raw_client: function () {
+        return new HttpClient({host: host, port: port, type: 'http'});
     },
 
     server: {
