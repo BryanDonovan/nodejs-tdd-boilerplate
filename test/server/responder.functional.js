@@ -190,16 +190,28 @@ describe("functional - server/responder.js", function () {
     });
 
     describe("download()", function () {
-        var filename, stream, stats;
+        var filename;
+        var stream;
+        var stats;
+
+        before(function () {
+            filename = path.join(__dirname, '../support/tmp', 'downloaded_file.js');
+            if (fs.existsSync(filename)) {
+                fs.unlinkSync(filename);
+            }
+        });
+
+        after(function () {
+            fs.unlinkSync(filename);
+        });
 
         it("returns correct headers and content", function (done) {
             http_raw_client.get('/test/downloads/content', function (err, data, res, req) {
-                assert.ifError(err); // connection error;
+                assert.ifError(err);
 
                 req.on('result', function (err, res) {
-                    assert.ifError(err); // HTTP status code >= 400;
+                    assert.ifError(err);
 
-                    filename = path.join(__dirname, '../support/tmp', 'downloaded_file.js');
                     var expected_file_size = fs.statSync(file_to_download).size;
                     stream = fs.createWriteStream(filename);
 
