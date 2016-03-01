@@ -1,29 +1,31 @@
 {
-    "name": "nodejs-tdd-boilerplate",
-    "version": "0.0.5",
-    "description": "TDD boilerplate for NodeJS API apps",
-    "author": "Bryan Donovan",
-    "engines": {
-        "node": ">= 0.8.11"
-    },
-    "main": "./index",
-    "dependencies": {
-        "async": "0.2.9",
-        "bunyan": "0.21.4",
-        "cli-color": "0.2.2",
-        "optimist" : "0.6.0",
-        "restify": "2.6.0",
-        "settings": "0.1.1"
-    },
-    "devDependencies": {
-        "Faker" : "0.5.11",
-        "jshint": "2.1.10",
-        "istanbul": "0.1.43",
-        "mocha": "1.12.0",
-        "sinon": "1.7.3"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/BryanDonovan/nodejs-tdd-boilerplate"
-    }
+  "name": "nodejs-tdd-boilerplate",
+  "version": "0.0.5",
+  "description": "TDD boilerplate for NodeJS API apps",
+  "author": "Bryan Donovan",
+  "engines": {
+    "node": ">= 0.8.11"
+  },
+  "main": "./index",
+  "dependencies": {
+    "async": "1.5.2",
+    "bunyan": "1.7.1",
+    "cache-manager": "1.4.0",
+    "cli-color": "0.2.2",
+    "lru-cache-cluster": "1.0.0",
+    "optimist": "0.6.0",
+    "restify": "4.0.4",
+    "settings": "0.1.1"
+  },
+  "devDependencies": {
+    "faker": "3.0.1",
+    "istanbul": "0.4.2",
+    "jshint": "2.9.1",
+    "mocha": "2.4.5",
+    "sinon": "1.17.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BryanDonovan/nodejs-tdd-boilerplate"
+  }
 }
